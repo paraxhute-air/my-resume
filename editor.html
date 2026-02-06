@@ -137,13 +137,14 @@
     }
     
     .logout-btn {
-      padding: 8px 16px;
+      padding: 8px 14px;
       background: transparent;
       color: #ef4444;
       border: 1px solid #ef4444;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 500;
+      white-space: nowrap;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -398,30 +399,51 @@
     }
     
     .primary-btn {
-      padding: 12px 24px;
-      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-      color: white;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    }
-    
-    .secondary-btn {
-      padding: 12px 24px;
+      padding: 8px 14px;
       background: var(--bg-secondary);
       color: var(--text-primary);
       border: 1px solid var(--border);
       border-radius: 8px;
       font-weight: 500;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    
+    .primary-btn:hover {
+      background: var(--border);
+    }
+    
+    .secondary-btn {
+      padding: 8px 14px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 13px;
+      white-space: nowrap;
       transition: all 0.2s;
     }
     
     .secondary-btn:hover {
+      background: var(--border);
+    }
+    
+    .save-btn {
+      padding: 8px 14px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .save-btn:hover {
       background: var(--border);
     }
     
@@ -500,29 +522,33 @@
       animation: tooltipPop 0.3s ease;
     }
     
+    /* Tooltip appears below button (for top save button) */
+    .save-tooltip.tooltip-bottom {
+      bottom: auto;
+      top: 100%;
+      margin-bottom: 0;
+      margin-top: 8px;
+    }
+    
+    .save-tooltip.tooltip-bottom::after {
+      top: auto;
+      bottom: 100%;
+      border-top-color: transparent;
+      border-bottom-color: #059669;
+    }
+    
+    .save-tooltip.tooltip-bottom.show {
+      animation: tooltipPopBottom 0.3s ease;
+    }
+    
     @keyframes tooltipPop {
       0% { transform: translateX(-50%) scale(0.8) translateY(10px); opacity: 0; }
       100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; }
     }
     
-    .save-btn {
-      padding: 12px 24px;
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .save-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
-    }
-    
-    .save-btn:active {
-      transform: scale(0.98);
+    @keyframes tooltipPopBottom {
+      0% { transform: translateX(-50%) scale(0.8) translateY(-10px); opacity: 0; }
+      100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; }
     }
     
     /* Image Crop Modal Styles */
@@ -630,7 +656,7 @@
           <button id="theme-toggle" class="theme-toggle" aria-label="테마 전환"></button>
           <a href="index.html" class="secondary-btn text-sm">👁 미리보기</a>
           <div class="save-btn-wrapper">
-            <span id="save-tooltip" class="save-tooltip">✅ 저장되었습니다!</span>
+            <span id="save-tooltip" class="save-tooltip tooltip-bottom">✅ 저장되었습니다!</span>
             <button id="save-btn" class="save-btn text-sm">💾 저장</button>
           </div>
           <button id="import-btn" class="secondary-btn text-sm">📤 JSON 불러오기</button>
