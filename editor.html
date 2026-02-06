@@ -106,16 +106,19 @@
     }
     
     .remove-btn {
-      padding: 8px 16px;
-      background: #ef4444;
-      color: white;
+      padding: 6px 10px;
+      background: transparent;
+      color: #ef4444;
+      border: 1px solid #ef4444;
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 12px;
       transition: all 0.2s;
+      cursor: pointer;
     }
     
     .remove-btn:hover {
-      background: #dc2626;
+      background: #ef4444;
+      color: white;
     }
     
     .item-card {
@@ -124,6 +127,30 @@
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 16px;
+      position: relative;
+    }
+    
+    .item-card-header {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 12px;
+    }
+    
+    .logout-btn {
+      padding: 8px 16px;
+      background: transparent;
+      color: #ef4444;
+      border: 1px solid #ef4444;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .logout-btn:hover {
+      background: #ef4444;
+      color: white;
     }
     
     .password-modal {
@@ -432,6 +459,72 @@
       }
     }
     
+    /* Save button with tooltip */
+    .save-btn-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .save-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+    
+    .save-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #059669;
+    }
+    
+    .save-tooltip.show {
+      opacity: 1;
+      visibility: visible;
+      animation: tooltipPop 0.3s ease;
+    }
+    
+    @keyframes tooltipPop {
+      0% { transform: translateX(-50%) scale(0.8) translateY(10px); opacity: 0; }
+      100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; }
+    }
+    
+    .save-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
     /* Image Crop Modal Styles */
     .crop-modal {
       position: fixed;
@@ -536,7 +629,12 @@
         <div class="flex items-center gap-3">
           <button id="theme-toggle" class="theme-toggle" aria-label="테마 전환"></button>
           <a href="index.html" class="secondary-btn text-sm">👁 미리보기</a>
+          <div class="save-btn-wrapper">
+            <span id="save-tooltip" class="save-tooltip">✅ 저장되었습니다!</span>
+            <button id="save-btn" class="save-btn text-sm">💾 저장</button>
+          </div>
           <button id="export-btn" class="primary-btn text-sm">📥 JSON 내보내기</button>
+          <button id="logout-btn" class="logout-btn text-sm">🚪 로그아웃</button>
         </div>
       </div>
     </header>
@@ -665,8 +763,12 @@
       </div>
       
       <!-- Action Buttons -->
-      <div class="flex flex-wrap gap-4 justify-center py-8">
-        <button id="reset-btn" class="secondary-btn">🗑 초기화</button>
+      <div class="flex flex-wrap justify-center gap-4 mt-8">
+        <button id="reset-btn" class="secondary-btn">🗑 데이터 초기화</button>
+        <div class="save-btn-wrapper">
+          <span id="save-tooltip-bottom" class="save-tooltip">✅ 저장되었습니다!</span>
+          <button id="save-btn-bottom" class="save-btn">💾 저장</button>
+        </div>
         <button id="export-btn-bottom" class="primary-btn">📥 JSON 내보내기</button>
         <a href="index.html" class="primary-btn inline-block">👁 포트폴리오 보기</a>
       </div>

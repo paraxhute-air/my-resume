@@ -58,9 +58,14 @@ const elements = {
   addExperience: document.getElementById('add-experience'),
   addProject: document.getElementById('add-project'),
   addStrength: document.getElementById('add-strength'),
+  saveBtn: document.getElementById('save-btn'),
+  saveBtnBottom: document.getElementById('save-btn-bottom'),
+  saveTooltip: document.getElementById('save-tooltip'),
+  saveTooltipBottom: document.getElementById('save-tooltip-bottom'),
   exportBtn: document.getElementById('export-btn'),
   exportBtnBottom: document.getElementById('export-btn-bottom'),
   resetBtn: document.getElementById('reset-btn'),
+  logoutBtn: document.getElementById('logout-btn'),
   
   // Toast
   toast: document.getElementById('toast'),
@@ -103,6 +108,11 @@ function initAuth() {
   
   // Show password modal
   elements.passwordModal?.classList.remove('hidden');
+  
+  // Auto-focus password input
+  setTimeout(() => {
+    elements.passwordInput?.focus();
+  }, 100);
   
   // Handle password submit
   elements.passwordSubmit?.addEventListener('click', handlePasswordSubmit);
@@ -259,7 +269,9 @@ function renderExperienceList() {
           <label class="block text-sm font-medium mb-2">업무 내용</label>
           <textarea class="input-field exp-description" placeholder="담당 업무를 설명해주세요.">${escapeHtml(exp.description || '')}</textarea>
         </div>
-        <button class="remove-btn self-start" onclick="removeExperience(${index})">삭제</button>
+        <div class="flex justify-end">
+          <button class="remove-btn" onclick="removeExperience(${index})">✕ 삭제</button>
+        </div>
       </div>
     </div>
   `).join('');
@@ -311,7 +323,9 @@ function renderProjectsList() {
           <input type="text" class="input-field proj-tech" value="${escapeHtml((proj.tech || []).join(', '))}" placeholder="React, Node.js, MongoDB">
           <p class="text-xs text-[var(--text-muted)] mt-1">쉼표(,)로 구분</p>
         </div>
-        <button class="remove-btn self-start" onclick="removeProject(${index})">삭제</button>
+        <div class="flex justify-end">
+          <button class="remove-btn" onclick="removeProject(${index})">✕ 삭제</button>
+        </div>
       </div>
     </div>
   `).join('');
@@ -352,7 +366,9 @@ function renderStrengthsList() {
           <label class="block text-sm font-medium mb-2">설명</label>
           <textarea class="input-field str-description" placeholder="강점을 설명해주세요.">${escapeHtml(str.description || '')}</textarea>
         </div>
-        <button class="remove-btn self-start" onclick="removeStrength(${index})">삭제</button>
+        <div class="flex justify-end">
+          <button class="remove-btn" onclick="removeStrength(${index})">✕ 삭제</button>
+        </div>
       </div>
     </div>
   `).join('');
@@ -382,9 +398,11 @@ function addExperience() {
 }
 
 function removeExperience(index) {
-  portfolioData.experience.splice(index, 1);
-  renderExperienceList();
-  saveData();
+  if (confirm('이 경력 항목을 삭제하시겠습니까?')) {
+    portfolioData.experience.splice(index, 1);
+    renderExperienceList();
+    saveData();
+  }
 }
 
 function addProject() {
@@ -395,9 +413,11 @@ function addProject() {
 }
 
 function removeProject(index) {
-  portfolioData.projects.splice(index, 1);
-  renderProjectsList();
-  saveData();
+  if (confirm('이 프로젝트를 삭제하시겠습니까?')) {
+    portfolioData.projects.splice(index, 1);
+    renderProjectsList();
+    saveData();
+  }
 }
 
 function addStrength() {
@@ -408,9 +428,11 @@ function addStrength() {
 }
 
 function removeStrength(index) {
-  portfolioData.strengths.splice(index, 1);
-  renderStrengthsList();
-  saveData();
+  if (confirm('이 강점 항목을 삭제하시겠습니까?')) {
+    portfolioData.strengths.splice(index, 1);
+    renderStrengthsList();
+    saveData();
+  }
 }
 
 // Make functions global
@@ -679,12 +701,46 @@ function initEventListeners() {
   elements.addProject?.addEventListener('click', addProject);
   elements.addStrength?.addEventListener('click', addStrength);
   
+  // Save buttons
+  elements.saveBtn?.addEventListener('click', () => manualSave('save-tooltip'));
+  elements.saveBtnBottom?.addEventListener('click', () => manualSave('save-tooltip-bottom'));
+  
   // Export buttons
   elements.exportBtn?.addEventListener('click', exportJSON);
   elements.exportBtnBottom?.addEventListener('click', exportJSON);
   
   // Reset button
   elements.resetBtn?.addEventListener('click', resetData);
+  
+  // Logout button
+  elements.logoutBtn?.addEventListener('click', logout);
+}
+
+// ========================================
+// Logout
+// ========================================
+function logout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  location.reload();
+}
+
+// ========================================
+// Manual Save (with tooltip)
+// ========================================
+function manualSave(tooltipId) {
+  // Save data
+  saveData();
+  
+  // Show tooltip
+  const tooltip = document.getElementById(tooltipId);
+  if (tooltip) {
+    tooltip.classList.add('show');
+    
+    // Hide after 2 seconds
+    setTimeout(() => {
+      tooltip.classList.remove('show');
+    }, 2000);
+  }
 }
 
 // ========================================
