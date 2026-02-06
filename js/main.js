@@ -310,6 +310,10 @@ function initConnectionLines() {
         if (entry.isIntersecting) {
           currentActiveId = entry.target.getAttribute('data-section');
           updateConnectionLines(currentActiveId);
+          
+          // Spotlight/Lift Effect
+          document.querySelectorAll('section').forEach(s => s.classList.remove('active-section'));
+          entry.target.classList.add('active-section');
         }
       });
     },
@@ -600,6 +604,61 @@ function initEventListeners() {
   // Theme toggles
   elements.themeToggleDesktop?.addEventListener("click", toggleTheme);
   elements.themeToggleMobile?.addEventListener("click", toggleTheme);
+  
+  // PC View Toggle
+  const pcViewBtn = document.getElementById("pc-view-btn");
+  const mobileViewBtnDesktop = document.getElementById("mobile-view-btn-desktop");
+  
+  if (pcViewBtn) {
+    pcViewBtn.addEventListener("click", togglePcView);
+  }
+  if (mobileViewBtnDesktop) {
+    mobileViewBtnDesktop.addEventListener("click", togglePcView);
+  }
+}
+
+// ========================================
+// PC View Toggle
+// ========================================
+function togglePcView() {
+  const meta = document.querySelector('meta[name="viewport"]');
+  const mobileBtn = document.getElementById("pc-view-btn"); // Button in mobile menu
+  const desktopBtn = document.getElementById("mobile-view-btn-desktop"); // Button in desktop sidebar
+  
+  if (!meta) return;
+  
+  const isMobile = meta.content.includes("width=device-width");
+  
+  if (isMobile) {
+    // Switch to PC View
+    meta.setAttribute("content", "width=1200");
+    
+    // Update buttons
+    if (mobileBtn) {
+      mobileBtn.innerHTML = "📱 모바일 버전으로 보기";
+      mobileBtn.classList.add("text-[var(--accent)]", "font-bold");
+    }
+    
+    // Show desktop button (since sidebar will appear)
+    if (desktopBtn) {
+      desktopBtn.classList.remove("hidden");
+    }
+    
+  } else {
+    // Switch back to Mobile
+    meta.setAttribute("content", "width=device-width, initial-scale=1.0");
+    
+    // Update buttons
+    if (mobileBtn) {
+      mobileBtn.innerHTML = "🖥️ PC 버전으로 보기";
+      mobileBtn.classList.remove("text-[var(--accent)]", "font-bold");
+    }
+    
+    // Hide desktop button
+    if (desktopBtn) {
+      desktopBtn.classList.add("hidden");
+    }
+  }
 }
 
 // ========================================

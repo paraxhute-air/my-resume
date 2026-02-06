@@ -118,6 +118,9 @@
       <button id="pdf-btn-mobile" class="pdf-btn mt-8 w-full no-print">
         📄 PDF 다운로드
       </button>
+      <button id="pc-view-btn" class="mt-4 w-full py-2 text-[var(--text-secondary)] text-sm hover:text-[var(--accent)] transition-colors no-print">
+        🖥️ PC 버전으로 보기
+      </button>
     </nav>
 
     <div class="flex">
@@ -173,18 +176,23 @@
         <div class="space-y-4 no-print">
           <!-- Theme Toggle (Desktop) -->
           <div class="flex items-center gap-3">
-            <span class="text-sm text-[var(--text-secondary)]">🌙</span>
+            <span class="text-sm text-[var(--text-secondary)]">☀️</span>
             <button
               id="theme-toggle-desktop"
               class="theme-toggle"
               aria-label="테마 전환"
             ></button>
-            <span class="text-sm text-[var(--text-secondary)]">☀️</span>
+            <span class="text-sm text-[var(--text-secondary)]">🌙</span>
           </div>
 
           <!-- PDF Download -->
           <button id="pdf-btn-desktop" class="pdf-btn w-full">
             📄 PDF 다운로드
+          </button>
+          
+          <!-- Mobile View Toggle (Hidden by default, shown when PC view is active on mobile) -->
+          <button id="mobile-view-btn-desktop" class="pc-view-toggle-desktop hidden mt-4 w-full py-2 text-[var(--accent)] text-sm font-bold border border-[var(--accent)] rounded-lg hover:bg-[var(--accent)] hover:text-white transition-colors no-print">
+            📱 모바일 버전으로 보기
           </button>
         </div>
       </aside>
