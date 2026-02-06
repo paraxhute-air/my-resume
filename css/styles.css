@@ -199,9 +199,9 @@ body {
 /* Profile Image */
 .profile-image {
   position: relative;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
+  width: 160px;
+  height: 200px;
+  border-radius: 12px;
   overflow: hidden;
   border: 4px solid var(--accent);
   box-shadow: 0 8px 24px var(--shadow);

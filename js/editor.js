@@ -564,18 +564,37 @@ function applyCrop(posX, posY, scale) {
   
   if (!ctx || !img || !area) return;
   
-  const areaRect = area.getBoundingClientRect();
-  canvas.width = 400;
-  canvas.height = 500;
+  // Output size (4:5 ratio like preview)
+  const outputWidth = 400;
+  const outputHeight = 500;
+  canvas.width = outputWidth;
+  canvas.height = outputHeight;
   
   const tempImg = new Image();
   tempImg.onload = () => {
-    const imgW = tempImg.width * scale * (areaRect.height / img.offsetHeight);
-    const imgH = tempImg.height * scale * (areaRect.height / img.offsetHeight);
-    const srcX = (-posX / areaRect.width) * canvas.width;
-    const srcY = (-posY / areaRect.height) * canvas.height;
+    // Get the preview area dimensions
+    const areaRect = area.getBoundingClientRect();
+    const areaWidth = areaRect.width;
+    const areaHeight = areaRect.height;
     
-    ctx.drawImage(tempImg, -srcX, -srcY, imgW, imgH);
+    // Calculate the actual displayed image size in the preview
+    const imgDisplayWidth = img.offsetWidth * scale;
+    const imgDisplayHeight = img.offsetHeight * scale;
+    
+    // Calculate the ratio between output canvas and preview area
+    const ratioX = outputWidth / areaWidth;
+    const ratioY = outputHeight / areaHeight;
+    
+    // Calculate source image dimensions on canvas
+    const drawWidth = imgDisplayWidth * ratioX;
+    const drawHeight = imgDisplayHeight * ratioY;
+    
+    // Calculate position on canvas (convert from preview coordinates)
+    const drawX = posX * ratioX;
+    const drawY = posY * ratioY;
+    
+    // Draw the image with the same transform as preview
+    ctx.drawImage(tempImg, drawX, drawY, drawWidth, drawHeight);
     
     const croppedImage = canvas.toDataURL('image/jpeg', 0.9);
     
