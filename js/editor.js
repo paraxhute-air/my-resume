@@ -64,6 +64,9 @@ const elements = {
   saveTooltipBottom: document.getElementById('save-tooltip-bottom'),
   exportBtn: document.getElementById('export-btn'),
   exportBtnBottom: document.getElementById('export-btn-bottom'),
+  importBtn: document.getElementById('import-btn'),
+  importBtnBottom: document.getElementById('import-btn-bottom'),
+  importFileInput: document.getElementById('import-file-input'),
   resetBtn: document.getElementById('reset-btn'),
   logoutBtn: document.getElementById('logout-btn'),
   
@@ -709,11 +712,48 @@ function initEventListeners() {
   elements.exportBtn?.addEventListener('click', exportJSON);
   elements.exportBtnBottom?.addEventListener('click', exportJSON);
   
+  // Import buttons
+  elements.importBtn?.addEventListener('click', () => elements.importFileInput?.click());
+  elements.importBtnBottom?.addEventListener('click', () => elements.importFileInput?.click());
+  elements.importFileInput?.addEventListener('change', importJSON);
+  
   // Reset button
   elements.resetBtn?.addEventListener('click', resetData);
   
   // Logout button
   elements.logoutBtn?.addEventListener('click', logout);
+}
+
+// ========================================
+// Import JSON
+// ========================================
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    try {
+      const importedData = JSON.parse(event.target.result);
+      
+      // Validate basic structure
+      if (!importedData.profile) {
+        throw new Error('Invalid data format');
+      }
+      
+      portfolioData = importedData;
+      saveData();
+      renderEditor();
+      showToast('✅ JSON 파일을 불러왔습니다!');
+    } catch (error) {
+      alert('❌ 올바른 JSON 파일이 아닙니다.');
+      console.error('Import error:', error);
+    }
+  };
+  reader.readAsText(file);
+  
+  // Reset input so same file can be selected again
+  e.target.value = '';
 }
 
 // ========================================

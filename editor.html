@@ -633,6 +633,7 @@
             <span id="save-tooltip" class="save-tooltip">✅ 저장되었습니다!</span>
             <button id="save-btn" class="save-btn text-sm">💾 저장</button>
           </div>
+          <button id="import-btn" class="secondary-btn text-sm">📤 JSON 불러오기</button>
           <button id="export-btn" class="primary-btn text-sm">📥 JSON 내보내기</button>
           <button id="logout-btn" class="logout-btn text-sm">🚪 로그아웃</button>
         </div>
@@ -769,9 +770,13 @@
           <span id="save-tooltip-bottom" class="save-tooltip">✅ 저장되었습니다!</span>
           <button id="save-btn-bottom" class="save-btn">💾 저장</button>
         </div>
+        <button id="import-btn-bottom" class="secondary-btn">📤 JSON 불러오기</button>
         <button id="export-btn-bottom" class="primary-btn">📥 JSON 내보내기</button>
         <a href="index.html" class="primary-btn inline-block">👁 포트폴리오 보기</a>
       </div>
+      
+      <!-- Hidden file input for JSON import -->
+      <input type="file" id="import-file-input" accept=".json" class="hidden">
     </main>
   </div>
   

@@ -371,26 +371,27 @@ function initTypingAnimation() {
 // ========================================
 async function loadData() {
   try {
-    // Always load fresh data from JSON file
+    // Check localStorage first (where editor saves data)
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    
+    if (storedData) {
+      portfolioData = JSON.parse(storedData);
+      renderPortfolio();
+      return;
+    }
+    
+    // Fallback to JSON file if no localStorage data
     const response = await fetch(DATA_URL);
     if (!response.ok) throw new Error("Failed to load data");
     portfolioData = await response.json();
     
-    // Save to localStorage for offline use
+    // Save to localStorage for next time
     localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolioData));
 
     renderPortfolio();
   } catch (error) {
     console.error("Error loading data:", error);
-    
-    // Fallback to localStorage if fetch fails
-    const storedData = localStorage.getItem(STORAGE_KEY);
-    if (storedData) {
-      portfolioData = JSON.parse(storedData);
-      renderPortfolio();
-    } else {
-      showPlaceholderContent();
-    }
+    showPlaceholderContent();
   }
 }
 
