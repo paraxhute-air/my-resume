@@ -1,0 +1,68 @@
+{
+  "profile": {
+    "name": "홍길동",
+    "title": "웹 개발자 | 풀스택 엔지니어",
+    "summary": "사용자 중심의 웹 애플리케이션을 개발하는 5년차 개발자입니다. 클린 코드와 지속 가능한 아키텍처를 추구합니다.",
+    "image": "resources/images/profile.jpg"
+  },
+  "experience": [
+    {
+      "company": "테크 스타트업 주식회사",
+      "period": "2022.03 - 현재",
+      "role": "시니어 프론트엔드 개발자",
+      "description": "React 기반 대시보드 시스템 개발 및 유지보수, 주니어 개발자 멘토링"
+    },
+    {
+      "company": "디지털 솔루션즈",
+      "period": "2020.01 - 2022.02",
+      "role": "풀스택 개발자",
+      "description": "Node.js/Express 백엔드 API 개발, Vue.js 프론트엔드 구현"
+    },
+    {
+      "company": "웹 에이전시 ABC",
+      "period": "2019.01 - 2019.12",
+      "role": "주니어 웹 개발자",
+      "description": "반응형 웹사이트 퍼블리싱, WordPress 테마 커스터마이징"
+    }
+  ],
+  "projects": [
+    {
+      "name": "실시간 협업 도구",
+      "period": "2023.06 - 2023.12",
+      "description": "WebSocket 기반 실시간 문서 편집 플랫폼. 동시 편집, 버전 관리, 댓글 기능 구현",
+      "tech": ["React", "Node.js", "Socket.io", "MongoDB"]
+    },
+    {
+      "name": "전자상거래 플랫폼",
+      "period": "2022.01 - 2022.06",
+      "description": "중소 판매자를 위한 온라인 쇼핑몰 솔루션. 결제 연동, 재고 관리, 배송 추적",
+      "tech": ["Vue.js", "Express", "PostgreSQL", "Stripe"]
+    },
+    {
+      "name": "건강 관리 앱",
+      "period": "2021.03 - 2021.08",
+      "description": "일일 건강 습관 추적 및 분석 대시보드. 차트 시각화, 목표 설정 기능",
+      "tech": ["React Native", "Firebase", "Chart.js"]
+    }
+  ],
+  "skills": {
+    "programming": ["JavaScript", "TypeScript", "Python", "HTML/CSS", "SQL"],
+    "tools": ["VS Code", "Git/GitHub", "Figma", "Docker", "AWS", "Jira"],
+    "languages": ["한국어 (원어민)", "영어 (비즈니스)", "일본어 (초급)"]
+  },
+  "strengths": [
+    {
+      "title": "문제 해결 능력",
+      "description": "복잡한 기술적 문제를 체계적으로 분석하고 효율적인 솔루션을 도출합니다."
+    },
+    {
+      "title": "커뮤니케이션",
+      "description": "비개발자와도 원활하게 소통하며 요구사항을 정확히 파악합니다."
+    },
+    {
+      "title": "지속적 학습",
+      "description": "새로운 기술 트렌드를 빠르게 습득하고 실무에 적용합니다."
+    }
+  ],
+  "finalNote": "기술을 통해 사람들의 삶을 더 편리하게 만드는 것이 저의 목표입니다. 항상 배우는 자세로 성장하며, 팀과 함께 더 큰 가치를 창출하고 싶습니다."
+}

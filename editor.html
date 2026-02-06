@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Portfolio Editor | 관리자</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Editor-specific styles */
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    
+    .input-field::placeholder {
+      color: var(--text-muted);
+    }
+    
+    textarea.input-field {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .add-btn:hover {
+      background: var(--accent-light);
+      transform: translateY(-1px);
+    }
+    
+    .remove-btn {
+      padding: 8px 16px;
+      background: #ef4444;
+      color: white;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .remove-btn:hover {
+      background: #dc2626;
+    }
+    
+    .item-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .password-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    
+    .password-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    
+    .primary-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: white;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    
+    .secondary-btn {
+      padding: 12px 24px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .secondary-btn:hover {
+      background: var(--border);
+    }
+    
+    .hidden { display: none !important; }
+    
+    .profile-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 16px 24px;
+      background: #10b981;
+      color: white;
+      border-radius: 8px;
+      font-weight: 500;
+      z-index: 200;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    /* Image Crop Modal Styles */
+    .crop-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+    }
+    
+    .crop-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 450px;
+    }
+    
+    .crop-preview-area {
+      position: relative;
+      width: 240px;
+      height: 300px;
+      margin: 0 auto 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 3px solid var(--accent);
+      cursor: grab;
+      background: #1e293b;
+    }
+    
+    .crop-preview-area:active {
+      cursor: grabbing;
+    }
+    
+    .crop-preview-area img {
+      position: absolute;
+      max-width: none;
+      pointer-events: none;
+    }
+    
+    .zoom-slider {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--border);
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    .zoom-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .zoom-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+  </style>
+</head>
+<body class="font-sans min-h-screen transition-colors duration-300">
+  <!-- Animated Background -->
+  <div class="gradient-bg"></div>
+  
+  <!-- Password Modal -->
+  <div id="password-modal" class="password-modal">
+    <div class="password-box">
+      <h2 class="text-2xl font-bold mb-2">🔐 접근 제한</h2>
+      <p class="text-[var(--text-secondary)] mb-6">관리자 비밀번호를 입력해주세요.</p>
+      <input 
+        type="password" 
+        id="password-input" 
+        class="input-field mb-4" 
+        placeholder="비밀번호"
+        autocomplete="off"
+      >
+      <p id="password-error" class="text-red-500 text-sm mb-4 hidden">비밀번호가 올바르지 않습니다.</p>
+      <button id="password-submit" class="primary-btn w-full">확인</button>
+    </div>
+  </div>
+  
+  <!-- Main Editor (Hidden until authenticated) -->
+  <div id="editor-container" class="hidden">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[var(--bg-secondary)] border-b border-[var(--border)] px-6 py-4">
+      <div class="max-w-4xl mx-auto flex items-center justify-between">
+        <h1 class="text-xl font-bold text-[var(--accent)]">📝 Portfolio Editor</h1>
+        <div class="flex items-center gap-3">
+          <button id="theme-toggle" class="theme-toggle" aria-label="테마 전환"></button>
+          <a href="index.html" class="secondary-btn text-sm">👁 미리보기</a>
+          <button id="export-btn" class="primary-btn text-sm">📥 JSON 내보내기</button>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Editor Content -->
+    <main class="max-w-4xl mx-auto px-6 py-8">
+      <!-- Auto-save indicator -->
+      <div id="save-indicator" class="text-sm text-[var(--text-muted)] mb-6">
+        ✅ 변경사항이 자동으로 저장됩니다.
+      </div>
+      
+      <!-- PROFILE Section -->
+      <div class="section-card">
+        <h2 class="section-title">
+          <span>👤</span> PROFILE
+        </h2>
+        
+        <div class="flex flex-col md:flex-row gap-6 mb-6">
+          <!-- Profile Image -->
+          <div class="flex flex-col items-center gap-4">
+            <img id="profile-preview" class="profile-preview" 
+                 src="resources/images/profile.jpg" 
+                 alt="프로필 미리보기"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%236366f1%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22>👤</text></svg>'">
+            <div class="flex gap-2">
+              <label class="add-btn text-sm cursor-pointer">
+                📷 이미지 선택
+                <input type="file" id="profile-image-input" accept="image/*" class="hidden">
+              </label>
+              <button id="remove-image-btn" class="remove-btn text-sm">삭제</button>
+            </div>
+          </div>
+          
+          <!-- Profile Info -->
+          <div class="flex-1 space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">이름</label>
+              <input type="text" id="profile-name" class="input-field" placeholder="홍길동">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">직함/직책</label>
+              <input type="text" id="profile-title" class="input-field" placeholder="웹 개발자 | 풀스택 엔지니어">
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-2">자기소개</label>
+          <textarea id="profile-summary" class="input-field" placeholder="간략한 자기소개를 입력하세요."></textarea>
+        </div>
+      </div>
+      
+      <!-- EXPERIENCE Section -->
+      <div class="section-card">
+        <h2 class="section-title">
+          <span>💼</span> EXPERIENCE
+        </h2>
+        <div id="experience-list">
+          <!-- Experience items will be rendered here -->
+        </div>
+        <button id="add-experience" class="add-btn">
+          <span>+</span> 경력 추가
+        </button>
+      </div>
+      
+      <!-- PROJECTS Section -->
+      <div class="section-card">
+        <h2 class="section-title">
+          <span>🚀</span> PROJECTS
+        </h2>
+        <div id="projects-list">
+          <!-- Project items will be rendered here -->
+        </div>
+        <button id="add-project" class="add-btn">
+          <span>+</span> 프로젝트 추가
+        </button>
+      </div>
+      
+      <!-- SKILLS Section -->
+      <div class="section-card">
+        <h2 class="section-title">
+          <span>⚡</span> SKILL SET
+        </h2>
+        
+        <div class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium mb-2">Programming / Tech</label>
+            <input type="text" id="skills-programming" class="input-field" 
+                   placeholder="JavaScript, TypeScript, Python (쉼표로 구분)">
+            <p class="text-xs text-[var(--text-muted)] mt-1">쉼표(,)로 구분하여 입력하세요.</p>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium mb-2">Software / Tools</label>
+            <input type="text" id="skills-tools" class="input-field" 
+                   placeholder="VS Code, Git, Docker (쉼표로 구분)">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium mb-2">Language</label>
+            <input type="text" id="skills-languages" class="input-field" 
+                   placeholder="한국어 (원어민), 영어 (비즈니스)">
+          </div>
+        </div>
+      </div>
+      
+      <!-- STRENGTHS Section -->
+      <div class="section-card">
+        <h2 class="section-title">
+          <span>💪</span> STRENGTHS
+        </h2>
+        <div id="strengths-list">
+          <!-- Strength items will be rendered here -->
+        </div>
+        <button id="add-strength" class="add-btn">
+          <span>+</span> 강점 추가
+        </button>
+      </div>
+      
+      <!-- FINAL NOTE Section -->
+      <div class="section-card">
+        <h2 class="section-title">
+          <span>✨</span> FINAL NOTE
+        </h2>
+        <textarea id="final-note" class="input-field" placeholder="포부와 마무리 메시지를 입력하세요."></textarea>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4 justify-center py-8">
+        <button id="reset-btn" class="secondary-btn">🗑 초기화</button>
+        <button id="export-btn-bottom" class="primary-btn">📥 JSON 내보내기</button>
+        <a href="index.html" class="primary-btn inline-block">👁 포트폴리오 보기</a>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Image Crop Modal -->
+  <div id="crop-modal" class="crop-modal hidden">
+    <div class="crop-container">
+      <h3 class="text-lg font-semibold mb-4 text-center">📷 이미지 위치 조정</h3>
+      <p class="text-sm text-[var(--text-muted)] text-center mb-4">드래그하여 위치를 조정하세요</p>
+      
+      <div id="crop-preview-area" class="crop-preview-area">
+        <img id="crop-image" src="" alt="크롭 미리보기">
+      </div>
+      
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm">🔍 확대/축소</span>
+          <span id="zoom-value" class="text-sm text-[var(--accent)]">100%</span>
+        </div>
+        <input type="range" id="zoom-slider" class="zoom-slider" min="50" max="200" value="100">
+      </div>
+      
+      <div class="flex gap-3">
+        <button id="crop-cancel" class="secondary-btn flex-1">취소</button>
+        <button id="crop-apply" class="primary-btn flex-1">적용</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden"></div>
+  
+  <!-- Editor JavaScript -->
+  <script src="js/editor.js"></script>
+</body>
+</html>

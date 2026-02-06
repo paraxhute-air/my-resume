@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="개인 포트폴리오 - 웹 개발자의 경력, 프로젝트, 기술 스택을 소개합니다."
+    />
+    <title>Portfolio | 웹 개발자</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <!-- html2pdf.js for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              primary: {
+                50: "#eef2ff",
+                100: "#e0e7ff",
+                200: "#c7d2fe",
+                300: "#a5b4fc",
+                400: "#818cf8",
+                500: "#6366f1",
+                600: "#4f46e5",
+                700: "#4338ca",
+                800: "#3730a3",
+                900: "#312e81",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-sans min-h-screen transition-colors duration-300">
+    <!-- Animated Background -->
+    <div class="gradient-bg"></div>
+
+    <!-- Mobile Header -->
+    <header
+      class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[var(--bg-secondary)] border-b border-[var(--border)] px-4 py-3"
+    >
+      <div class="flex items-center justify-between">
+        <h1 class="text-lg font-bold text-[var(--accent)]">Portfolio</h1>
+        <div class="flex items-center gap-4">
+          <!-- Theme Toggle (Mobile) -->
+          <button
+            id="theme-toggle-mobile"
+            class="theme-toggle no-print"
+            aria-label="테마 전환"
+          ></button>
+          <!-- Hamburger Menu -->
+          <button id="hamburger" class="hamburger no-print" aria-label="메뉴">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div
+      id="mobile-menu-overlay"
+      class="lg:hidden fixed inset-0 bg-black/50 z-40 hidden"
+    ></div>
+
+    <!-- Mobile Navigation -->
+    <nav
+      id="mobile-menu"
+      class="mobile-menu lg:hidden fixed top-0 left-0 bottom-0 w-72 bg-[var(--bg-secondary)] z-50 pt-20 px-6"
+    >
+      <ul class="space-y-4">
+        <li>
+          <a href="#profile" class="nav-link block py-2 text-lg">PROFILE</a>
+        </li>
+        <li>
+          <a href="#experience" class="nav-link block py-2 text-lg"
+            >EXPERIENCE</a
+          >
+        </li>
+        <li>
+          <a href="#projects" class="nav-link block py-2 text-lg">PROJECTS</a>
+        </li>
+        <li>
+          <a href="#skills" class="nav-link block py-2 text-lg">SKILL SET</a>
+        </li>
+        <li>
+          <a href="#strengths" class="nav-link block py-2 text-lg">STRENGTHS</a>
+        </li>
+        <li>
+          <a href="#final-note" class="nav-link block py-2 text-lg"
+            >FINAL NOTE</a
+          >
+        </li>
+      </ul>
+      <button id="pdf-btn-mobile" class="pdf-btn mt-8 w-full no-print">
+        📄 PDF 다운로드
+      </button>
+    </nav>
+
+    <div class="flex">
+      <!-- Desktop Sidebar Navigation -->
+      <aside
+        class="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-[var(--bg-secondary)] border-r border-[var(--border)] p-8 z-40"
+      >
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-[var(--accent)]">Portfolio</h1>
+        </div>
+
+        <nav class="flex-1">
+          <ul class="space-y-3">
+            <li>
+              <a href="#profile" class="nav-link block py-2 pl-4">PROFILE</a>
+            </li>
+            <li>
+              <a href="#experience" class="nav-link block py-2 pl-4"
+                >EXPERIENCE</a
+              >
+            </li>
+            <li>
+              <a href="#projects" class="nav-link block py-2 pl-4">PROJECTS</a>
+            </li>
+            <li>
+              <a href="#skills" class="nav-link block py-2 pl-4">SKILL SET</a>
+            </li>
+            <li>
+              <a href="#strengths" class="nav-link block py-2 pl-4"
+                >STRENGTHS</a
+              >
+            </li>
+            <li>
+              <a href="#final-note" class="nav-link block py-2 pl-4"
+                >FINAL NOTE</a
+              >
+            </li>
+          </ul>
+        </nav>
+
+        <div class="space-y-4 no-print">
+          <!-- Theme Toggle (Desktop) -->
+          <div class="flex items-center gap-3">
+            <span class="text-sm text-[var(--text-secondary)]">🌙</span>
+            <button
+              id="theme-toggle-desktop"
+              class="theme-toggle"
+              aria-label="테마 전환"
+            ></button>
+            <span class="text-sm text-[var(--text-secondary)]">☀️</span>
+          </div>
+
+          <!-- PDF Download -->
+          <button id="pdf-btn-desktop" class="pdf-btn w-full">
+            📄 PDF 다운로드
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main id="main-content" class="flex-1 lg:ml-64 pt-16 lg:pt-0">
+        <div class="max-w-4xl mx-auto px-6 py-12 lg:py-16">
+          <!-- PROFILE Section -->
+          <section id="profile" class="fade-in mb-20">
+            <div
+              class="flex flex-col md:flex-row items-center md:items-start gap-8"
+            >
+              <div class="profile-image flex-shrink-0">
+                <img
+                  id="profile-img"
+                  src="resources/images/profile.jpg"
+                  alt="프로필 사진"
+                  onerror="
+                    this.src =
+                      'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%236366f1%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22>👤</text></svg>'
+                  "
+                />
+              </div>
+              <div class="text-center md:text-left">
+                <h1 id="profile-name" class="text-4xl font-bold mb-2">
+                  홍길동
+                </h1>
+                <p
+                  id="profile-title"
+                  class="text-xl text-[var(--accent)] font-medium mb-4"
+                >
+                  웹 개발자
+                </p>
+                <p
+                  id="profile-summary"
+                  class="text-[var(--text-secondary)] leading-relaxed max-w-lg"
+                >
+                  사용자 중심의 웹 애플리케이션을 개발하는 개발자입니다.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXPERIENCE Section -->
+          <section id="experience" class="fade-in mb-20">
+            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+              <span class="text-[var(--accent)]">💼</span> EXPERIENCE
+            </h2>
+            <div id="experience-list" class="space-y-8">
+              <!-- Experience items will be rendered here -->
+            </div>
+          </section>
+
+          <!-- PROJECTS Section -->
+          <section id="projects" class="fade-in mb-20">
+            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+              <span class="text-[var(--accent)]">🚀</span> PROJECTS
+            </h2>
+            <div id="projects-list" class="grid md:grid-cols-2 gap-6">
+              <!-- Project cards will be rendered here -->
+            </div>
+          </section>
+
+          <!-- SKILL SET Section -->
+          <section id="skills" class="fade-in mb-20">
+            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+              <span class="text-[var(--accent)]">⚡</span> SKILL SET
+            </h2>
+
+            <div class="space-y-8">
+              <!-- Programming/Tech -->
+              <div class="card p-6">
+                <h3 class="text-lg font-semibold mb-4 text-[var(--accent)]">
+                  Programming / Tech
+                </h3>
+                <div id="skills-programming" class="flex flex-wrap gap-2">
+                  <!-- Skill tags will be rendered here -->
+                </div>
+              </div>
+
+              <!-- Software/Tools -->
+              <div class="card p-6">
+                <h3 class="text-lg font-semibold mb-4 text-[var(--accent)]">
+                  Software / Tools
+                </h3>
+                <div id="skills-tools" class="flex flex-wrap gap-2">
+                  <!-- Skill tags will be rendered here -->
+                </div>
+              </div>
+
+              <!-- Languages -->
+              <div class="card p-6">
+                <h3 class="text-lg font-semibold mb-4 text-[var(--accent)]">
+                  Language
+                </h3>
+                <div id="skills-languages" class="flex flex-wrap gap-2">
+                  <!-- Skill tags will be rendered here -->
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- STRENGTHS Section -->
+          <section id="strengths" class="fade-in mb-20">
+            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+              <span class="text-[var(--accent)]">💪</span> STRENGTHS
+            </h2>
+            <div id="strengths-list" class="space-y-4">
+              <!-- Strength cards will be rendered here -->
+            </div>
+          </section>
+
+          <!-- FINAL NOTE Section -->
+          <section id="final-note" class="fade-in mb-12">
+            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+              <span class="text-[var(--accent)]">✨</span> FINAL NOTE
+            </h2>
+            <div class="card p-8">
+              <p
+                id="final-note-text"
+                class="text-lg leading-relaxed text-[var(--text-secondary)] italic"
+              >
+                <!-- Final note will be rendered here -->
+              </p>
+            </div>
+          </section>
+
+          <!-- Footer -->
+          <footer
+            class="text-center text-[var(--text-muted)] text-sm pt-8 border-t border-[var(--border)]"
+          >
+            <p>© 2024 Portfolio. Built with ❤️</p>
+          </footer>
+        </div>
+      </main>
+    </div>
+
+    <!-- Main JavaScript -->
+    <script src="js/main.js"></script>
+  </body>
+</html>
