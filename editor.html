@@ -129,21 +129,245 @@
     .password-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 100;
+      overflow: hidden;
+    }
+    
+    /* Scanlines effect */
+    .password-modal::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.3) 2px,
+        rgba(0, 0, 0, 0.3) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    /* Vignette effect */
+    .password-modal::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+      pointer-events: none;
     }
     
     .password-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
+      background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+      border: 2px solid #ff3b3b;
+      border-radius: 8px;
+      padding: 40px;
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       text-align: center;
+      position: relative;
+      z-index: 2;
+      box-shadow: 
+        0 0 40px rgba(255, 59, 59, 0.3),
+        0 0 80px rgba(255, 59, 59, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      animation: boxPulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes boxPulse {
+      0%, 100% { box-shadow: 0 0 40px rgba(255, 59, 59, 0.3), 0 0 80px rgba(255, 59, 59, 0.1); }
+      50% { box-shadow: 0 0 60px rgba(255, 59, 59, 0.5), 0 0 100px rgba(255, 59, 59, 0.2); }
+    }
+    
+    /* Warning stripes */
+    .password-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: repeating-linear-gradient(
+        90deg,
+        #ff3b3b 0px,
+        #ff3b3b 10px,
+        #1a1a2e 10px,
+        #1a1a2e 20px
+      );
+      animation: stripeMove 1s linear infinite;
+    }
+    
+    @keyframes stripeMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 20px 0; }
+    }
+    
+    .password-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes iconPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+    
+    .password-title {
+      color: #ff3b3b;
+      font-size: 28px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(255, 59, 59, 0.5);
+    }
+    
+    .password-subtitle {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    
+    .password-input-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    
+    .password-input-wrapper input {
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #333;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 20px;
+      letter-spacing: 6px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .password-input-wrapper input:focus {
+      outline: none;
+      border-color: #ff3b3b;
+      box-shadow: 0 0 20px rgba(255, 59, 59, 0.2);
+    }
+    
+    .password-input-wrapper input::placeholder {
+      letter-spacing: 6px;
+      color: #444;
+      font-size: 10px;
+    }
+    
+    .password-input-wrapper input::-webkit-input-placeholder {
+      font-size: 10px;
+    }
+    
+    .password-submit-btn {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #ff3b3b, #cc0000);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .password-submit-btn:hover {
+      background: linear-gradient(135deg, #ff5555, #ff3b3b);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 59, 59, 0.4);
+    }
+    
+    .password-error-msg {
+      color: #ff6b6b;
+      font-size: 14px;
+      margin-bottom: 16px;
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    /* Error flash animation */
+    @keyframes errorFlash {
+      0%, 100% { background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%); }
+      10%, 30% { background: linear-gradient(180deg, #3a1a1a 0%, #2a0f0f 100%); }
+      20%, 40% { background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%); }
+    }
+    
+    @keyframes vibrate {
+      0%, 100% { transform: translateX(0); }
+      10% { transform: translateX(-8px) rotate(-1deg); }
+      20% { transform: translateX(8px) rotate(1deg); }
+      30% { transform: translateX(-8px) rotate(-1deg); }
+      40% { transform: translateX(8px) rotate(1deg); }
+      50% { transform: translateX(-6px); }
+      60% { transform: translateX(6px); }
+      70% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+      90% { transform: translateX(-2px); }
+    }
+    
+    .password-box.error {
+      animation: errorFlash 0.6s ease-in-out, vibrate 0.6s ease-in-out;
+      border-color: #ff0000;
+    }
+    
+    /* Success state */
+    .password-box.success {
+      border-color: #00ff88 !important;
+      box-shadow: 
+        0 0 40px rgba(0, 255, 136, 0.4),
+        0 0 80px rgba(0, 255, 136, 0.2) !important;
+      animation: successPulse 0.5s ease-out;
+    }
+    
+    @keyframes successPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    
+    .password-box.success::before {
+      background: repeating-linear-gradient(
+        90deg,
+        #00ff88 0px,
+        #00ff88 10px,
+        #1a1a2e 10px,
+        #1a1a2e 20px
+      ) !important;
+    }
+    
+    .password-box.success .password-title {
+      color: #00ff88 !important;
+      text-shadow: 0 0 20px rgba(0, 255, 136, 0.5) !important;
+    }
+    
+    .password-box.success .password-submit-btn {
+      background: linear-gradient(135deg, #00ff88, #00cc6a) !important;
+    }
+    
+    .password-box.success .password-input-wrapper input {
+      border-color: #00ff88 !important;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2) !important;
+    }
+    
+    .password-box.success .password-icon {
+      animation: none;
     }
     
     .primary-btn {
@@ -287,17 +511,19 @@
   <!-- Password Modal -->
   <div id="password-modal" class="password-modal">
     <div class="password-box">
-      <h2 class="text-2xl font-bold mb-2">🔐 접근 제한</h2>
-      <p class="text-[var(--text-secondary)] mb-6">관리자 비밀번호를 입력해주세요.</p>
-      <input 
-        type="password" 
-        id="password-input" 
-        class="input-field mb-4" 
-        placeholder="비밀번호"
-        autocomplete="off"
-      >
-      <p id="password-error" class="text-red-500 text-sm mb-4 hidden">비밀번호가 올바르지 않습니다.</p>
-      <button id="password-submit" class="primary-btn w-full">확인</button>
+      <div class="password-icon">🔒</div>
+      <h2 class="password-title">Access Denied</h2>
+      <p class="password-subtitle">인가된 사용자만 접근할 수 있습니다</p>
+      <div class="password-input-wrapper">
+        <input 
+          type="password" 
+          id="password-input" 
+          placeholder="● ● ● ● ● ●"
+          autocomplete="off"
+        >
+      </div>
+      <p id="password-error" class="password-error-msg hidden">⚠️ 잘못된 비밀번호입니다</p>
+      <button id="password-submit" class="password-submit-btn">인증</button>
     </div>
   </div>
   
