@@ -422,3 +422,321 @@ section {
     height: 140px;
   }
 }
+
+/* ========================================
+   Interactive Resume Styles
+   ======================================== */
+
+/* Paper Container */
+.paper-container {
+  background: var(--bg-card);
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.08),
+    0 4px 6px rgba(0,0,0,0.04),
+    0 12px 24px rgba(0,0,0,0.06),
+    0 24px 48px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.paper-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+}
+
+.dark .paper-container {
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.2),
+    0 4px 6px rgba(0,0,0,0.15),
+    0 12px 24px rgba(0,0,0,0.2),
+    0 24px 48px rgba(0,0,0,0.25);
+}
+
+/* Typing Animation */
+.typing-text {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid var(--accent);
+  animation: 
+    typing 2s steps(20, end) forwards,
+    blink-caret 0.75s step-end infinite;
+}
+
+.typing-text.done {
+  border-right-color: transparent;
+  animation: none;
+}
+
+.typing-text-delayed {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  border-right: 3px solid var(--accent);
+  animation: 
+    typing 1.5s steps(15, end) forwards 2.2s,
+    blink-caret 0.75s step-end infinite 2.2s;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: var(--accent) }
+}
+
+/* 3D Tilt Effect */
+.profile-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.3s ease-out;
+}
+
+.profile-3d:hover {
+  transform: rotateY(0deg) rotateX(0deg);
+}
+
+.profile-3d .profile-image {
+  transform: translateZ(20px);
+  transition: all 0.3s ease-out;
+}
+
+.profile-3d:hover .profile-image {
+  box-shadow: 
+    0 20px 40px var(--shadow),
+    0 0 30px rgba(99, 102, 241, 0.3);
+}
+
+/* Skill Progress Bar */
+.skill-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.skill-item .skill-tag {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.skill-item:hover .skill-tag {
+  padding-right: 60px;
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.skill-bar-container {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 6px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.skill-item:hover .skill-bar-container {
+  opacity: 1;
+}
+
+.skill-bar {
+  height: 100%;
+  background: white;
+  border-radius: 3px;
+  width: 0;
+  transition: width 0.5s ease-out;
+}
+
+.skill-item:hover .skill-bar {
+  width: var(--skill-level, 80%);
+}
+
+/* Navigation Connection Lines */
+.connection-svg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+  overflow: visible;
+}
+
+.connection-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 8 4;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.connection-line.active {
+  opacity: 0.6;
+  animation: dash 20s linear infinite;
+}
+
+.connection-line.hover {
+  opacity: 0.8;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw-line 0.5s ease forwards;
+}
+
+.connection-dot {
+  fill: var(--accent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.connection-dot.active,
+.connection-dot.hover {
+  opacity: 1;
+}
+
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -48; }
+}
+
+/* Timeline Drawing Animation */
+.timeline-animated {
+  position: relative;
+}
+
+.timeline-animated::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 0;
+  width: 2px;
+  height: 0;
+  background: var(--accent);
+  transition: height 0.6s ease-out;
+}
+
+.timeline-animated.visible::before {
+  height: 100%;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -13px;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 3px solid var(--bg-primary);
+  transform: scale(0);
+  transition: transform 0.3s ease 0.3s;
+}
+
+.timeline-animated.visible .timeline-dot {
+  transform: scale(1);
+}
+
+/* Card Lift Effect */
+.card-lift {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card-lift:hover {
+  transform: translateY(-8px) rotateX(2deg);
+  box-shadow: 
+    0 20px 40px var(--shadow),
+    0 0 0 1px var(--accent);
+}
+
+/* Section Reveal Animation */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-section.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children animations */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.stagger-children.revealed > *:nth-child(1) { transition-delay: 0.1s; }
+.stagger-children.revealed > *:nth-child(2) { transition-delay: 0.2s; }
+.stagger-children.revealed > *:nth-child(3) { transition-delay: 0.3s; }
+.stagger-children.revealed > *:nth-child(4) { transition-delay: 0.4s; }
+.stagger-children.revealed > *:nth-child(5) { transition-delay: 0.5s; }
+.stagger-children.revealed > *:nth-child(6) { transition-delay: 0.6s; }
+
+.stagger-children.revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section Divider */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+/* Hide connection lines on mobile */
+@media (max-width: 1024px) {
+  .connection-svg {
+    display: none;
+  }
+}
+
+/* PDF Print - disable animations */
+@media print {
+  .typing-text,
+  .typing-text-delayed {
+    width: auto !important;
+    border-right: none !important;
+    animation: none !important;
+  }
+  
+  .connection-svg {
+    display: none !important;
+  }
+  
+  .paper-container {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}
+

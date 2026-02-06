@@ -132,28 +132,40 @@
         <nav class="flex-1">
           <ul class="space-y-3">
             <li>
-              <a href="#profile" class="nav-link block py-2 pl-4">PROFILE</a>
+              <a href="#profile" class="nav-link block py-2 pl-4 flex items-center justify-between" data-target="profile">
+                PROFILE
+                <span class="nav-dot w-2 h-2 rounded-full bg-[var(--accent)] opacity-0 transition-opacity"></span>
+              </a>
             </li>
             <li>
-              <a href="#experience" class="nav-link block py-2 pl-4"
-                >EXPERIENCE</a
-              >
+              <a href="#experience" class="nav-link block py-2 pl-4 flex items-center justify-between" data-target="experience">
+                EXPERIENCE
+                <span class="nav-dot w-2 h-2 rounded-full bg-[var(--accent)] opacity-0 transition-opacity"></span>
+              </a>
             </li>
             <li>
-              <a href="#projects" class="nav-link block py-2 pl-4">PROJECTS</a>
+              <a href="#projects" class="nav-link block py-2 pl-4 flex items-center justify-between" data-target="projects">
+                PROJECTS
+                <span class="nav-dot w-2 h-2 rounded-full bg-[var(--accent)] opacity-0 transition-opacity"></span>
+              </a>
             </li>
             <li>
-              <a href="#skills" class="nav-link block py-2 pl-4">SKILL SET</a>
+              <a href="#skills" class="nav-link block py-2 pl-4 flex items-center justify-between" data-target="skills">
+                SKILL SET
+                <span class="nav-dot w-2 h-2 rounded-full bg-[var(--accent)] opacity-0 transition-opacity"></span>
+              </a>
             </li>
             <li>
-              <a href="#strengths" class="nav-link block py-2 pl-4"
-                >STRENGTHS</a
-              >
+              <a href="#strengths" class="nav-link block py-2 pl-4 flex items-center justify-between" data-target="strengths">
+                STRENGTHS
+                <span class="nav-dot w-2 h-2 rounded-full bg-[var(--accent)] opacity-0 transition-opacity"></span>
+              </a>
             </li>
             <li>
-              <a href="#final-note" class="nav-link block py-2 pl-4"
-                >FINAL NOTE</a
-              >
+              <a href="#final-note" class="nav-link block py-2 pl-4 flex items-center justify-between" data-target="final-note">
+                FINAL NOTE
+                <span class="nav-dot w-2 h-2 rounded-full bg-[var(--accent)] opacity-0 transition-opacity"></span>
+              </a>
             </li>
           </ul>
         </nav>
@@ -179,32 +191,44 @@
 
       <!-- Main Content -->
       <main id="main-content" class="flex-1 lg:ml-64 pt-16 lg:pt-0">
+        <!-- SVG Connection Lines (Desktop only) -->
+        <svg id="connection-svg" class="connection-svg hidden lg:block">
+          <!-- Lines will be dynamically added by JS -->
+        </svg>
+        
         <div class="max-w-4xl mx-auto px-6 py-12 lg:py-16">
+          <!-- Paper Container -->
+          <div class="paper-container p-8 lg:p-12">
           <!-- PROFILE Section -->
-          <section id="profile" class="fade-in mb-20">
+          <section id="profile" class="reveal-section mb-16" data-section="profile">
             <div
               class="flex flex-col md:flex-row items-center md:items-start gap-8"
             >
-              <div class="profile-image flex-shrink-0">
-                <img
-                  id="profile-img"
-                  src="resources/images/profile.jpg"
-                  alt="프로필 사진"
-                  onerror="
-                    this.src =
-                      'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%236366f1%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22>👤</text></svg>'
-                  "
-                />
+              <!-- 3D Tilt Profile Photo -->
+              <div class="profile-3d flex-shrink-0">
+                <div class="profile-image">
+                  <img
+                    id="profile-img"
+                    src="resources/images/profile.jpg"
+                    alt="프로필 사진"
+                    onerror="
+                      this.src =
+                        'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%236366f1%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22>👤</text></svg>'
+                    "
+                  />
+                </div>
               </div>
               <div class="text-center md:text-left">
+                <!-- Typing Animation Name -->
                 <h1 id="profile-name" class="text-4xl font-bold mb-2">
-                  홍길동
+                  <span class="typing-text">홍길동</span>
                 </h1>
+                <!-- Typing Animation Title -->
                 <p
                   id="profile-title"
                   class="text-xl text-[var(--accent)] font-medium mb-4"
                 >
-                  웹 개발자
+                  <span class="typing-text-delayed">웹 개발자</span>
                 </p>
                 <p
                   id="profile-summary"
@@ -217,28 +241,28 @@
           </section>
 
           <!-- EXPERIENCE Section -->
-          <section id="experience" class="fade-in mb-20">
-            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+          <section id="experience" class="reveal-section mb-16" data-section="experience">
+            <h2 class="text-2xl font-bold section-divider">
               <span class="text-[var(--accent)]">💼</span> EXPERIENCE
             </h2>
-            <div id="experience-list" class="space-y-8">
+            <div id="experience-list" class="space-y-6 stagger-children">
               <!-- Experience items will be rendered here -->
             </div>
           </section>
 
           <!-- PROJECTS Section -->
-          <section id="projects" class="fade-in mb-20">
-            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+          <section id="projects" class="reveal-section mb-16" data-section="projects">
+            <h2 class="text-2xl font-bold section-divider">
               <span class="text-[var(--accent)]">🚀</span> PROJECTS
             </h2>
-            <div id="projects-list" class="grid md:grid-cols-2 gap-6">
+            <div id="projects-list" class="grid md:grid-cols-2 gap-6 stagger-children">
               <!-- Project cards will be rendered here -->
             </div>
           </section>
 
           <!-- SKILL SET Section -->
-          <section id="skills" class="fade-in mb-20">
-            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+          <section id="skills" class="reveal-section mb-16" data-section="skills">
+            <h2 class="text-2xl font-bold section-divider">
               <span class="text-[var(--accent)]">⚡</span> SKILL SET
             </h2>
 
@@ -276,21 +300,21 @@
           </section>
 
           <!-- STRENGTHS Section -->
-          <section id="strengths" class="fade-in mb-20">
-            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+          <section id="strengths" class="reveal-section mb-16" data-section="strengths">
+            <h2 class="text-2xl font-bold section-divider">
               <span class="text-[var(--accent)]">💪</span> STRENGTHS
             </h2>
-            <div id="strengths-list" class="space-y-4">
+            <div id="strengths-list" class="space-y-4 stagger-children">
               <!-- Strength cards will be rendered here -->
             </div>
           </section>
 
           <!-- FINAL NOTE Section -->
-          <section id="final-note" class="fade-in mb-12">
-            <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+          <section id="final-note" class="reveal-section mb-12" data-section="final-note">
+            <h2 class="text-2xl font-bold section-divider">
               <span class="text-[var(--accent)]">✨</span> FINAL NOTE
             </h2>
-            <div class="card p-8">
+            <div class="card card-lift p-8">
               <p
                 id="final-note-text"
                 class="text-lg leading-relaxed text-[var(--text-secondary)] italic"
@@ -302,10 +326,11 @@
 
           <!-- Footer -->
           <footer
-            class="text-center text-[var(--text-muted)] text-sm pt-8 border-t border-[var(--border)]"
+            class="text-center text-[var(--text-muted)] text-sm pt-8 mt-8 border-t border-[var(--border)]"
           >
             <p>© 2024 Portfolio. Built with ❤️</p>
           </footer>
+          </div> <!-- Close paper-container -->
         </div>
       </main>
     </div>

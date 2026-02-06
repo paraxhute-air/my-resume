@@ -147,7 +147,7 @@ function updateActiveNav(activeId) {
 }
 
 // ========================================
-// Fade-in Animation
+// Fade-in Animation (Legacy support)
 // ========================================
 function initFadeAnimations() {
   const fadeElements = document.querySelectorAll(".fade-in");
@@ -167,27 +167,230 @@ function initFadeAnimations() {
 }
 
 // ========================================
+// Reveal Section Animations
+// ========================================
+function initRevealAnimations() {
+  const revealSections = document.querySelectorAll('.reveal-section');
+  const staggerContainers = document.querySelectorAll('.stagger-children');
+  
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: '-50px' }
+  );
+  
+  revealSections.forEach((section) => observer.observe(section));
+  staggerContainers.forEach((container) => observer.observe(container));
+}
+
+// ========================================
+// 3D Tilt Effect
+// ========================================
+function initTiltEffect() {
+  const tiltElement = document.querySelector('.profile-3d');
+  if (!tiltElement) return;
+  
+  tiltElement.addEventListener('mousemove', (e) => {
+    const rect = tiltElement.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (y - centerY) / 10;
+    const rotateY = (centerX - x) / 10;
+    
+    tiltElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+  
+  tiltElement.addEventListener('mouseleave', () => {
+    tiltElement.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+  });
+}
+
+// ========================================
+// Navigation Connection Lines
+// ========================================
+function initConnectionLines() {
+  const svg = document.getElementById('connection-svg');
+  const navLinks = document.querySelectorAll('.nav-link[data-target]');
+  
+  if (!svg || navLinks.length === 0) return;
+  
+  // Create connection elements
+  navLinks.forEach((link) => {
+    const targetId = link.getAttribute('data-target');
+    
+    // Create path element
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('class', 'connection-line');
+    path.setAttribute('data-connection', targetId);
+    svg.appendChild(path);
+    
+    // Create start dot
+    const startDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    startDot.setAttribute('class', 'connection-dot');
+    startDot.setAttribute('r', '4');
+    startDot.setAttribute('data-dot-start', targetId);
+    svg.appendChild(startDot);
+    
+    // Create end dot
+    const endDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    endDot.setAttribute('class', 'connection-dot');
+    endDot.setAttribute('r', '4');
+    endDot.setAttribute('data-dot-end', targetId);
+    svg.appendChild(endDot);
+  });
+  
+  // Update line positions
+  function updateConnectionLines(activeId = null, hoverId = null) {
+    navLinks.forEach((link) => {
+      const targetId = link.getAttribute('data-target');
+      const targetSection = document.querySelector(`[data-section="${targetId}"]`);
+      const navDot = link.querySelector('.nav-dot');
+      
+      if (!targetSection) return;
+      
+      const path = svg.querySelector(`[data-connection="${targetId}"]`);
+      const startDot = svg.querySelector(`[data-dot-start="${targetId}"]`);
+      const endDot = svg.querySelector(`[data-dot-end="${targetId}"]`);
+      
+      if (!path || !startDot || !endDot) return;
+      
+      // Get positions
+      const linkRect = link.getBoundingClientRect();
+      const sectionRect = targetSection.getBoundingClientRect();
+      
+      const startX = linkRect.right - 4;
+      const startY = linkRect.top + linkRect.height / 2;
+      const endX = sectionRect.left + 20;
+      const endY = sectionRect.top + 40;
+      
+      // Create curved path
+      const midX = startX + (endX - startX) / 2;
+      const pathD = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
+      
+      path.setAttribute('d', pathD);
+      startDot.setAttribute('cx', startX);
+      startDot.setAttribute('cy', startY);
+      endDot.setAttribute('cx', endX);
+      endDot.setAttribute('cy', endY);
+      
+      // Handle active/hover states
+      const isActive = targetId === activeId;
+      const isHover = targetId === hoverId;
+      
+      path.classList.toggle('active', isActive && !isHover);
+      path.classList.toggle('hover', isHover);
+      startDot.classList.toggle('active', isActive || isHover);
+      startDot.classList.toggle('hover', isHover);
+      endDot.classList.toggle('active', isActive || isHover);
+      endDot.classList.toggle('hover', isHover);
+      
+      // Update nav dot visibility
+      if (navDot) {
+        navDot.style.opacity = (isActive || isHover) ? '1' : '0';
+      }
+    });
+  }
+  
+  // Initialize with scroll position
+  let currentActiveId = null;
+  
+  // Intersection observer for active section
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          currentActiveId = entry.target.getAttribute('data-section');
+          updateConnectionLines(currentActiveId);
+        }
+      });
+    },
+    { rootMargin: '-20% 0px -60% 0px' }
+  );
+  
+  document.querySelectorAll('[data-section]').forEach((section) => {
+    sectionObserver.observe(section);
+  });
+  
+  // Hover effects
+  navLinks.forEach((link) => {
+    const targetId = link.getAttribute('data-target');
+    
+    link.addEventListener('mouseenter', () => {
+      updateConnectionLines(currentActiveId, targetId);
+    });
+    
+    link.addEventListener('mouseleave', () => {
+      updateConnectionLines(currentActiveId);
+    });
+  });
+  
+  // Update on scroll/resize
+  let ticking = false;
+  const updateOnScroll = () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateConnectionLines(currentActiveId);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  };
+  
+  window.addEventListener('scroll', updateOnScroll, { passive: true });
+  window.addEventListener('resize', updateOnScroll, { passive: true });
+  
+  // Initial update
+  setTimeout(() => updateConnectionLines(currentActiveId), 100);
+}
+
+// ========================================
+// Typing Animation
+// ========================================
+function initTypingAnimation() {
+  const typingElements = document.querySelectorAll('.typing-text');
+  
+  typingElements.forEach((el) => {
+    // Remove cursor after animation completes
+    el.addEventListener('animationend', () => {
+      el.classList.add('done');
+    });
+  });
+}
+
+// ========================================
 // Data Loading & Rendering
 // ========================================
 async function loadData() {
   try {
-    // Try to load from localStorage first
-    const storedData = localStorage.getItem(STORAGE_KEY);
-
-    if (storedData) {
-      portfolioData = JSON.parse(storedData);
-    } else {
-      // Fallback to JSON file
-      const response = await fetch(DATA_URL);
-      if (!response.ok) throw new Error("Failed to load data");
-      portfolioData = await response.json();
-    }
+    // Always load fresh data from JSON file
+    const response = await fetch(DATA_URL);
+    if (!response.ok) throw new Error("Failed to load data");
+    portfolioData = await response.json();
+    
+    // Save to localStorage for offline use
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolioData));
 
     renderPortfolio();
   } catch (error) {
     console.error("Error loading data:", error);
-    // Show placeholder content
-    showPlaceholderContent();
+    
+    // Fallback to localStorage if fetch fails
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (storedData) {
+      portfolioData = JSON.parse(storedData);
+      renderPortfolio();
+    } else {
+      showPlaceholderContent();
+    }
   }
 }
 
@@ -240,9 +443,10 @@ function renderExperience() {
 
   elements.experienceList.innerHTML = experience
     .map(
-      (exp) => `
-    <div class="timeline-item pb-6">
-      <div class="card p-6">
+      (exp, index) => `
+    <div class="timeline-item timeline-animated pb-6" style="--delay: ${index * 0.1}s">
+      <div class="timeline-dot"></div>
+      <div class="card card-lift p-6">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
           <h3 class="text-lg font-semibold">${escapeHtml(exp.company)}</h3>
           <span class="text-sm text-[var(--accent)]">${escapeHtml(exp.period)}</span>
@@ -254,6 +458,13 @@ function renderExperience() {
   `,
     )
     .join("");
+    
+  // Trigger timeline animation
+  setTimeout(() => {
+    document.querySelectorAll('.timeline-animated').forEach((el) => {
+      el.classList.add('visible');
+    });
+  }, 300);
 }
 
 function renderProjects() {
@@ -263,7 +474,7 @@ function renderProjects() {
   elements.projectsList.innerHTML = projects
     .map(
       (project) => `
-    <div class="card p-6">
+    <div class="card card-lift p-6">
       <div class="flex items-start justify-between mb-3">
         <h3 class="text-lg font-semibold">${escapeHtml(project.name)}</h3>
       </div>
@@ -314,7 +525,7 @@ function renderStrengths() {
   elements.strengthsList.innerHTML = strengths
     .map(
       (strength) => `
-    <div class="card strength-card p-6">
+    <div class="card card-lift strength-card p-6">
       <h3 class="text-lg font-semibold mb-2">${escapeHtml(strength.title)}</h3>
       <p class="text-[var(--text-secondary)]">${escapeHtml(strength.description)}</p>
     </div>
@@ -398,6 +609,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileMenu();
   initNavigation();
   initFadeAnimations();
+  initRevealAnimations();
+  initTiltEffect();
+  initConnectionLines();
+  initTypingAnimation();
   initEventListeners();
   initPdfExport();
   loadData();
